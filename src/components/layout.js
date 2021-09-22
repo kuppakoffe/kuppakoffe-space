@@ -5,14 +5,18 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import * as React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import * as React from 'react';
+import { Layout, Menu, Breadcrumb } from 'antd';
+import PropTypes from 'prop-types';
+import { useStaticQuery, graphql } from 'gatsby';
 
-import Header from "./header"
-import "./layout.css"
+// import Header from './header';
+import './layout.css';
 
-const Layout = ({ children }) => {
+const { Header, Content, Footer } = Layout;
+const { SubMenu, ItemGroup, Item } = Menu;
+
+const MyLayout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -21,35 +25,63 @@ const Layout = ({ children }) => {
         }
       }
     }
-  `)
+  `);
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
+      <Layout>
+        <Header
           style={{
-            marginTop: `2rem`,
+            position: 'fixed',
+            zIndex: 1,
+            width: '100%',
           }}
         >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
+          <Menu
+            mode="horizontal"
+          // defaultSelectedKeys={['1']}
+          >
+            <SubMenu key="tech" title="Tech Experiments">
+              <ItemGroup key="g1">
+                <Item key="Development">Development</Item>
+                <Item key="Deployment">Deployment</Item>
+              </ItemGroup>
+            </SubMenu>
+
+            <SubMenu key="fitness" title="Fitness">
+              <ItemGroup key="g2">
+                <Item key="Workout">Workout</Item>
+                <Item key="Cycling">Cycling</Item>
+              </ItemGroup>
+            </SubMenu>
+
+            <SubMenu key="food" title="Food">
+              <ItemGroup key="g3">
+                <Item key="Coffee">Coffee</Item>
+                <Item key="Cooking">Cooking</Item>
+                <Item key="Baking">Baking</Item>
+              </ItemGroup>
+            </SubMenu>
+          </Menu>
+
+        </Header>
+
+        <Content>
+          {children}
+        </Content>
+
+        <Footer
+          style={{ textAlign: 'center' }}
+        >
+          This is a footer component
+        </Footer>
+      </Layout>
     </>
-  )
-}
+  );
+};
 
-Layout.propTypes = {
+MyLayout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};
 
-export default Layout
+export default MyLayout;
